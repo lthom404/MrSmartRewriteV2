@@ -1,8 +1,12 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
+using MrSmartRewriteV2.Commands;
+using MrSmartRewriteV2.SlashCommands;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -30,6 +34,7 @@ namespace MrSmartRewriteV2
 
             var config = new DiscordConfiguration()
             {
+                Intents = DiscordIntents.All,
                 Token = configJson.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
@@ -46,7 +51,18 @@ namespace MrSmartRewriteV2
                 StringPrefixes = new string[] { configJson.Prefix },
                 EnableMentionPrefix = true,
                 EnableDms = true,
+                EnableDefaultHelp = false,
             };
+
+            Commands = Client.UseCommandsNext(commandsConfig);
+            var slashCommandsConfig = Client.UseSlashCommands();
+
+            //Prefix Commands
+            Commands.RegisterCommands<FunCommands>();
+            Commands.RegisterCommands<EmbedCommands>();
+
+            //Slash Commands
+            slashCommandsConfig.RegisterCommands<EmbedSL>(795254716883402752);
 
             await Client.ConnectAsync();
             await Task.Delay(-1);
