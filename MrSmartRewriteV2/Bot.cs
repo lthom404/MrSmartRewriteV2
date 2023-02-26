@@ -63,6 +63,7 @@ namespace MrSmartRewriteV2
 
             //Slash Commands
             slashCommandsConfig.RegisterCommands<EmbedSL>(795254716883402752);
+            slashCommandsConfig.RegisterCommands<ModCommands>(795254716883402752);
 
             await Client.ConnectAsync();
             await Task.Delay(-1);
