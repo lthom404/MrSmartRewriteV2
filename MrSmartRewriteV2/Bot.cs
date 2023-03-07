@@ -60,6 +60,7 @@ namespace MrSmartRewriteV2
             //Prefix Commands
             Commands.RegisterCommands<FunCommands>();
             Commands.RegisterCommands<EmbedCommands>();
+            Commands.RegisterCommands<OwnerCommands>();
 
             //Slash Commands
             slashCommandsConfig.RegisterCommands<EmbedSL>(795254716883402752);
