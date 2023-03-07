@@ -13,7 +13,7 @@ namespace MrSmartRewriteV2.Commands
         [Command("test")]
         public async Task TestCommand(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("hello");
+            await ctx.Channel.SendMessageAsync("hello world!");
         }
 
         [Command("add")]
