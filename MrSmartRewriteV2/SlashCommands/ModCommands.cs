@@ -86,6 +86,11 @@ namespace MrSmartRewriteV2.SlashCommands
 
             await modlogChannel.SendMessageAsync(deletechannelLog);
         }
+        [SlashCommand("cChannel", "Creates a channel")]{
+            public async Task CreateChannelCommand(InteractionContext ctx, [Option("Channel Name", "Name of channel")] string name){
+                
+            }
+        }
 
     }
 }
