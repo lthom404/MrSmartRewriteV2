@@ -64,6 +64,9 @@ namespace MrSmartRewriteV2.SlashCommands
 
             await modlogChannel.SendMessageAsync(kickLog);
         }
+
+        //Channel mod Commands
+
         [SlashCommand("dchannel", "Deletes a specified channel")]
         public async Task DeleteChannelSlashCommand(InteractionContext ctx, [Option("channel", "channel to be deleted")] DiscordChannel channel, [Option("reason", "Reason for deleting channel")] string reason)
         {
@@ -87,15 +90,30 @@ namespace MrSmartRewriteV2.SlashCommands
 
             await modlogChannel.SendMessageAsync(deletechannelLog);
         }
+
         [SlashCommand("cChannel", "Creates a channel")]
-        public async Task CreateChannelCommand(InteractionContext ctx, [Option("Name", "Name of channel")] string name, [Option("Type", "Type of channel to be created")] ChannelType type, [Option("Category", "Category to be added to")] DiscordChannel channel, [Option("Reason", "Reason for creating channel")] string reason)
+        public async Task CreateChannelCommand(InteractionContext ctx, [Option("Name", "Name of channel")] string name, [Option("Type", "Type of channel to be created")] ChannelType type, [Option("Category", "Category to be added to")] DiscordChannel category, [Option("Reason", "Reason for creating channel")] string reason)
         {
             await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                .WithContent("Creating Channel...")); 
+                .WithContent("Creating Channel..."));
+
+            var noCategoryEmbed = new DiscordEmbedBuilder()
+                .WithTitle("❌ Make sure you use a category not a channel");
+
+            var test = category.IsCategory;
+            if (test == false)
+            {
+                await ctx.DeleteResponseAsync();
+                await ctx.Channel.SendMessageAsync(noCategoryEmbed);
+                return;
+            }
+
+            DiscordChannel channel = await ctx.Guild.CreateChannelAsync(name, type, category);
+
             var createdchannelLog = new DiscordEmbedBuilder()
                 .WithAuthor("Channel Created")
                 .WithColor(DiscordColor.Red)
-                .WithDescription($"> **Channel:** {channel.Name}\n\n" +
+                .WithDescription($"> **Channel:** {name}\n\n" +
                 $"> **Channel ID:** {channel.Id}\n\n" +
                 $"> **Created By:** {ctx.Member.Username}\n\n" +
                 $"> **Reason:** {reason}")
@@ -105,8 +123,6 @@ namespace MrSmartRewriteV2.SlashCommands
             var modlogChannel = ctx.Guild.GetChannel(1079417214832230421);
 
             await modlogChannel.SendMessageAsync(createdchannelLog);
-
-            await ctx.Guild.CreateChannelAsync(name, type, channel);
         }
     }
 }
