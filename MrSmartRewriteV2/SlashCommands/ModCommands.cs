@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using System;
@@ -86,11 +87,21 @@ namespace MrSmartRewriteV2.SlashCommands
 
             await modlogChannel.SendMessageAsync(deletechannelLog);
         }
-        [SlashCommand("cChannel", "Creates a channel")]{
-            public async Task CreateChannelCommand(InteractionContext ctx, [Option("Channel Name", "Name of channel")] string name){
-                
-            }
-        }
+        [SlashCommand("cChannel", "Creates a channel")]
+        public async Task CreateChannelCommand(InteractionContext ctx, [Option("Channel Name", "Name of channel")] string name, [Option("Channel Type", "Type of channel to be created")] ChannelType type, [Option("Category", "Category to be added to")] DiscordChannel channel, [Option("Reason", "Reason for creating channel")] string reason)
+        {
 
+            var createdchannelLog = new DiscordEmbedBuilder()
+                .WithAuthor("Channel Created")
+                .WithColor(DiscordColor.Red)
+                .WithDescription($"> **Channel:** {channel.Name}\n\n" +
+                $"> **Channel ID:** {channel.Id}\n\n" +
+                $"> **Created By:** {ctx.Member.Username}\n\n" +
+                $"> **Reason:** {reason}")
+                .WithTimestamp(DateTime.Now)
+                .WithFooter($"New Channel Creation Logged");
+
+            await ctx.Guild.CreateChannelAsync(name, type, channel);
+        }
     }
 }
