@@ -13,9 +13,9 @@ namespace MrSmartRewriteV2.SlashCommands
     public class EmbedSL : ApplicationCommandModule
     {
         [SlashCommand("embed", "Creates a Custom Embed")]
-        public async Task EmbedSlashCommand(InteractionContext ctx, [Option("Title", "Title Of Embed")] string title, [Option("Description", "Body of Embed")] string description)
+        public async Task EmbedSlashCommand(InteractionContext ctx, [Option("Title", "Title Of Embed")] string title, [Option("Description", "Body of Embed")] string description, [Option("Channel", "Channel to send embed to.")]DiscordChannel channel)
         {
-
+            var embedChannel = channel;
             var embedMessage = new DiscordEmbedBuilder()
             {
                 Title = title,
@@ -28,9 +28,9 @@ namespace MrSmartRewriteV2.SlashCommands
             await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                 .WithContent("Embed Building and Sending..."));
 
-            var channel = ctx.Guild.GetChannel(1079369981558530088);
+            
 
-            await channel.SendMessageAsync(embedMessage);
+            await embedChannel.SendMessageAsync(embedMessage);
         }
     }
 }
